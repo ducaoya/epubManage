@@ -10,7 +10,8 @@ user.post("/signup", async(ctx) => {
         const { email, nickname, pwd } = ctx.request.body;
         check(!!email, "邮箱不能为空");
         check(!!pwd, "密码不能为空");
-
+        const results = await getUser(email, ctx);
+        check(!!results.results[0], "邮箱已存在");
         await addUser(email, nickname || "", pwd, ctx);
         ctx.body = generateOk("注册成功");
     } catch (error) {

@@ -3,11 +3,12 @@ const moment = require("moment");
 const { dbCatchError } = require("../lib/check");
 
 async function getUser(email, ctx) {
-    try {} catch (error) {
+    try {
+        let sql = `select * from wss_user where email = '${email}'`;
+        return await db.query(sql);
+    } catch (error) {
         dbCatchError(error, ctx);
     }
-    let sql = `select * from wss_user where email = '${email}'`;
-    return await db.query(sql);
 }
 
 async function addUser(email, nickname, password, ctx) {
