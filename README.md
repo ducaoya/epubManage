@@ -6,6 +6,8 @@ Node.js v16.13.0
 
 ## 食用方式
 
+项目运行在 3000 端口，可修改 index.js 中监听端口更改
+
 ```
 npm install
 node index.js
