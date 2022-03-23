@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   epubmanage:
@@ -10,3 +10,7 @@ services:
       NODE_ENV: production
     ports:
       - 3000:3000
+    volumes:
+      - .:/code
+volumes:
+  logvolume01: {}

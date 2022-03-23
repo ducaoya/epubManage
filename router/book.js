@@ -107,4 +107,10 @@ book.post("/delete", async(ctx) => {
     }
 });
 
+book.get("/test", async(ctx) => {
+    const date = new Date();
+    console.log("test log : ".date);
+    ctx.body = "test api";
+});
+
 module.exports = book;
