@@ -1,7 +1,7 @@
 const uuid = require("uuid");
 const db = require("../db");
 const s3 = require("../db/aws");
-const { dbCatchError, check } = require("../lib/check");
+const { dbCatchError } = require("../lib/check");
 const moment = require("moment");
 
 // 获取书籍
@@ -41,11 +41,11 @@ async function search(keyword, page, pageSize, email, ctx) {
 }
 
 // 上传书籍
-async function upload(title, author, publisher, email, ctx) {
+async function upload(title, author, publisher, description, email, ctx) {
     try {
         const id = uuid.v4();
         const date = moment(Date.now()).format("yy-MM-DD hh:mm:ss");
-        const sql = `insert into ebook (id,title,author,publisher,from_user,uploaded_date) value('${id}','${title}','${author}','${publisher}','${email}','${date}')`;
+        const sql = `insert into ebook (id,title,author,publisher,description,from_user,uploaded_date) value('${id}','${title}','${author}','${publisher}','${description}','${email}','${date}')`;
         await db.query(sql);
         const epubUrl = await s3.putUrl(id + ".epub");
         const imgUrl = await s3.putUrl(id + ".jpg");
