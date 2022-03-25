@@ -51,6 +51,7 @@ async function upload(title, author, publisher, description, email, ctx) {
         const epubUrl = await s3.putUrl(id + ".epub");
         const imgUrl = await b2.putImgUrl(id + ".jpg");
         return {
+            id,
             epubUrl,
             imgUrl,
         };
@@ -69,7 +70,7 @@ async function del(id, ctx) {
     }
 }
 
-// 确认删除
+// 确认上传
 async function verifyUpload(id, ctx) {
     try {
         const sql = `update ebook set is_active = 1 where id = '${id}'`;
