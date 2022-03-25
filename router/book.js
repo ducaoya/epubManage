@@ -10,6 +10,7 @@ const {
     upload,
     download,
     edit,
+    get,
 } = require("../server/book");
 const { verify } = require("../server/token");
 
@@ -22,6 +23,18 @@ book.post("/getbooks", async(ctx) => {
 
         const { page, pageSize } = ctx.request.body;
         ctx.body = generateOk(await getbooks(email, page, pageSize, ctx));
+    } catch (error) {
+        catchError(error, ctx);
+    }
+});
+
+// 获取书籍详情
+book.post("/get", async(ctx) => {
+    try {
+        const token = ctx.cookies.get("token");
+        verify(token, ctx);
+        const { id } = ctx.request.body;
+        ctx.body = generateOk(await get(id, ctx));
     } catch (error) {
         catchError(error, ctx);
     }

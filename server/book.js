@@ -104,6 +104,17 @@ async function edit(id, title, author, publisher) {
     }
 }
 
+async function get(id, ctx) {
+    try {
+        const sql = `select * from ebook where id = '${id}' and is_active = 1 `;
+        const results = await db.query(sql);
+
+        return results.results;
+    } catch (error) {
+        dbCatchError(error, ctx);
+    }
+}
+
 module.exports = {
     getbooks,
     search,
@@ -112,4 +123,5 @@ module.exports = {
     verifyUpload,
     download,
     edit,
+    get,
 };
