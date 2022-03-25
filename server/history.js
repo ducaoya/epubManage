@@ -2,6 +2,7 @@ const { createMongo } = require("../db/mongodb");
 const moment = require("moment");
 const { dbCatchError } = require("../lib/check");
 const { ObjectID } = require("bson");
+const { months } = require("moment");
 
 // 获取历史记录
 async function get(email, ctx) {
@@ -11,6 +12,11 @@ async function get(email, ctx) {
         const historys = [];
         await results.forEach((item) => {
             historys.push(item);
+        });
+        historys.sort((a, b) => {
+            const atime = new Date(a.date).getTime();
+            const btime = new Date(b.date).getTime();
+            return btime - atime;
         });
         return historys;
     } catch (error) {
