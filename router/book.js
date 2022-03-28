@@ -110,7 +110,7 @@ book.post("/edit", async(ctx) => {
         const { id, title, author, publisher, description, published_date } =
         ctx.request.body;
         edit(id, title, author, publisher, description, published_date, ctx);
-        ctx.body = "修改成功";
+        ctx.body = generateOk("修改成功");
     } catch (error) {
         catchError(error, ctx);
     }
