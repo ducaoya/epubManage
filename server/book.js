@@ -41,11 +41,19 @@ async function search(keyword, page, pageSize, email, ctx) {
 }
 
 // 上传书籍
-async function upload(title, author, publisher, description, email, ctx) {
+async function upload(
+    title,
+    author,
+    publisher,
+    description,
+    email,
+    published_date,
+    ctx
+) {
     try {
         const id = uuid.v4();
         const date = moment(Date.now()).format("yy-MM-DD hh:mm:ss");
-        const sql = `insert into ebook (id,title,author,publisher,description,from_user,uploaded_date) value('${id}','${title}','${author}','${publisher}','${description}','${email}','${date}')`;
+        const sql = `insert into ebook (id,title,author,publisher,description,from_user,uploaded_date,published_date) value('${id}','${title}','${author}','${publisher}','${description}','${email}','${date}','${published_date}')`;
         await db.query(sql);
         const epubUrl = await s3.putUrl(id + ".epub");
         const imgUrl = await s3.putUrl(id + ".jpg");
@@ -88,7 +96,15 @@ async function download(id) {
     };
 }
 
-async function edit(id, title, author, publisher) {
+async function edit(
+    id,
+    title,
+    author,
+    publisher,
+    description,
+    published_date,
+    ctx
+) {
     try {
         const sql1 = `select * from ebook where id = '${id}'`;
         const results1 = await db.query(sql1);
@@ -96,11 +112,17 @@ async function edit(id, title, author, publisher) {
         const sql2 = `update ebook 
                     set title = '${title || results1.results[0].title}' ,
                     author = '${author || results1.results[0].author}',
-                    publisher='${publisher || results1.results[0].publisher}' 
+                    publisher='${publisher || results1.results[0].publisher}', 
+                    description='${
+                      description || results1.results[0].description
+                    }' ,
+                    published_date='${
+                      published_date || results1.results[0].published_date
+                    }'
                     where id = '${id}'`;
         return await db.query(sql2);
     } catch (error) {
-        dbCatchError(error);
+        dbCatchError(error, ctx);
     }
 }
 

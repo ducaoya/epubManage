@@ -57,11 +57,20 @@ book.post("/search", async(ctx) => {
 // 上传书籍
 book.post("/upload", async(ctx) => {
     try {
-        const { title, author, publisher, description } = ctx.request.body;
+        const { title, author, publisher, description, published_date } =
+        ctx.request.body;
         const token = ctx.cookies.get("token");
         const tokenItem = verify(token, ctx);
         const { email } = tokenItem;
-        const url = await upload(title, author, publisher, description, email, ctx);
+        const url = await upload(
+            title,
+            author,
+            publisher,
+            description,
+            email,
+            published_date,
+            ctx
+        );
         ctx.body = generateOk(url);
     } catch (error) {
         catchError(error, ctx);
@@ -98,8 +107,9 @@ book.post("/edit", async(ctx) => {
     try {
         const token = ctx.cookies.get("token");
         verify(token, ctx);
-        const { id, title, author, publisher } = ctx.request.body;
-        edit(id, title, author, publisher);
+        const { id, title, author, publisher, description, published_date } =
+        ctx.request.body;
+        edit(id, title, author, publisher, description, published_date, ctx);
         ctx.body = "修改成功";
     } catch (error) {
         catchError(error, ctx);
